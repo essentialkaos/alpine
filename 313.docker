@@ -10,6 +10,9 @@ LABEL name="EK Image on Alpine 3.13" \
 
 COPY checkupdate /sbin/
 
-RUN apk -U upgrade && rm -f /var/cache/apk/* && rm -f /lib/apk/db/scripts.tar
+RUN apk -U upgrade && \
+    rm -f /var/cache/apk/* && \
+    rm -f /lib/apk/db/scripts.tar && \
+    rm -f /lib/apk/db/installed
 
 ################################################################################
