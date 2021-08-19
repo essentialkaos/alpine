@@ -12,7 +12,6 @@ COPY checkupdate /sbin/
 
 RUN apk -U upgrade && \
     rm -f /var/cache/apk/* && \
-    rm -f /lib/apk/db/scripts.tar && \
-    rm -f /lib/apk/db/installed
+    rm -f /lib/apk/db/scripts.tar
 
 ################################################################################
