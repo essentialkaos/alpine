@@ -6,4 +6,6 @@ if [[ $(apk version | wc -l) == "1" ]] ; then
   exit 0
 fi
 
+apk version
+
 exit 100
