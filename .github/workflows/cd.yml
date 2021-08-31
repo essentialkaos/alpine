@@ -40,7 +40,6 @@ jobs:
 
           echo "::group::Fetching images…"
           docker pull alpine:${{ matrix.version }}
-          docker pull essentialkaos/alpine:${{ matrix.version }}
 
           orig_dig=$(docker inspect "alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
           our_dig=$(docker inspect "essentialkaos/alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
