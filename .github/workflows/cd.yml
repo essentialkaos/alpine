@@ -32,3 +32,16 @@ jobs:
         if: ${{ steps.update_check.outcome == 'failure' }}
         run: |
           curl -H "Content-Type: application/json" --data '{"docker_tag": "${{ matrix.version }}"}' -X POST ${{ secrets.BUILD_TRIGGER_URL }}
+
+      - name: Check for rebuilt base image
+        if: ${{ steps.update_check.outcome != 'failure' }}
+        run: |
+          docker pull alpine:${{ matrix.version }}
+          docker pull essentialkaos/alpine:${{ matrix.version }}
+
+          orig_dig=$(docker inspect "alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
+          our_dig=$(docker inspect "essentialkaos/alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
+
+          if [[ "$orig_dig" != "$our_dig" ]] ; then
+            curl -H "Content-Type: application/json" --data '{"docker_tag": "${{ matrix.version }}"}' -X POST ${{ secrets.BUILD_TRIGGER_URL }}
+          fi
