@@ -36,6 +36,8 @@ jobs:
       - name: Check for rebuilt base image
         if: ${{ steps.update_check.outcome != 'failure' }}
         run: |
+          echo "Running check…"
+
           echo "::group::Fetching images…"
           docker pull alpine:${{ matrix.version }}
           docker pull essentialkaos/alpine:${{ matrix.version }}
