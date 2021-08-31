@@ -40,9 +40,15 @@ jobs:
 
           echo "::group::Fetching base image…"
           docker pull alpine:${{ matrix.version }}
+          echo "::endgroup::"
+
+          echo "::group::Check layers digests…"
 
           orig_dig=$(docker inspect "alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
           our_dig=$(docker inspect "essentialkaos/alpine:${{ matrix.version }}" | jq -r '.[0].RootFS.Layers[0]')
+
+          echo "Original: ${orig_dig}"
+          echo "Our:      ${our_dig}"
 
           echo "::endgroup::"
 
