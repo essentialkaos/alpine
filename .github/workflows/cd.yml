@@ -5,7 +5,13 @@ on:
     branches: [master]
   schedule:
     - cron: '30 4 * * *'
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force container rebuild'
+        required: true
+        type: choice
+        options: [yes, no]
 
 jobs:
   Alpine:
@@ -27,7 +33,11 @@ jobs:
         id: update_check
         continue-on-error: true
         run : |
-          docker run --rm essentialkaos/alpine:${{ matrix.version }} checkupdate
+          if [[ "${{ github.event.inputs.force_rebuild }}" == "yes" ]] ; then
+            exit 1
+          else
+            docker run --rm essentialkaos/alpine:${{ matrix.version }} checkupdate
+          fi
 
       - name: Trigger image rebuild
         if: ${{ steps.update_check.outcome == 'failure' }}
