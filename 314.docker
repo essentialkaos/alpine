@@ -2,7 +2,7 @@
 
 FROM alpine:3.14
 
-LABEL name="EK Image on Alpine 3.14" \
+LABEL name="EK Image with Alpine 3.14" \
       vendor="ESSENTIAL KAOS" \
       maintainer="Anton Novojilov" \
       license="Apache-2.0" \
