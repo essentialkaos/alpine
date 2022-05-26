@@ -53,9 +53,13 @@ jobs:
             echo "::set-output name=build::true"
             exit 0
           else
-            docker run --rm essentialkaos/alpine:${{matrix.version}} checkupdate
+            if ! docker pull essentialkaos/alpine:${{matrix.version}} ; then
+              echo "::warning::Rebuild ${{matrix.version}} (reason: new image)"
+              echo "::set-output name=build::true"
+              exit 0
+            fi
 
-            if [[ $? -ne 0 ]] ; then
+            if ! docker run --rm essentialkaos/alpine:${{matrix.version}} checkupdate ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
               echo "::set-output name=build::true"
               exit 0
