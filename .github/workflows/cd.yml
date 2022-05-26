@@ -36,15 +36,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set build context
-        id: build_context
-        run: |
-          dockerfile=$(echo "${{matrix.version}}" | tr -d ".")
-          echo "::set-output name=dockerfile::$dockerfile.docker"
-
       - name: Check for rebuild
         id: update_check
         continue-on-error: true
@@ -84,6 +75,17 @@ jobs:
           fi
 
           echo "::endgroup::"
+
+      - name: Checkout
+        if: ${{ steps.update_check.outcome == 'failure' }}
+        uses: actions/checkout@v3
+
+      - name: Set build context
+        if: ${{ steps.update_check.outcome == 'failure' }}
+        id: build_context
+        run: |
+          dockerfile=$(echo "${{matrix.version}}" | tr -d ".")
+          echo "::set-output name=dockerfile::$dockerfile.docker"
 
       - name: Rebuild and push image
         if: ${{ steps.update_check.outcome == 'failure' }}
