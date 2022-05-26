@@ -10,14 +10,13 @@
 
 <br/>
 
-This repository contains Dockerfiles for Alpine 3.11 - 3.15 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
+This repository contains Dockerfiles for Alpine 3.12 - 3.15 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
 
 ### Usage
 
 Using DockerHub:
 
 ```bash
-docker pull essentialkaos/alpine:3.11
 docker pull essentialkaos/alpine:3.12
 docker pull essentialkaos/alpine:3.13
 docker pull essentialkaos/alpine:3.14
@@ -27,7 +26,6 @@ docker pull essentialkaos/alpine:3.15
 Using GitHub Container Registry
 
 ```bash
-docker pull ghcr.io/essentialkaos/alpine:3.11
 docker pull ghcr.io/essentialkaos/alpine:3.12
 docker pull ghcr.io/essentialkaos/alpine:3.13
 docker pull ghcr.io/essentialkaos/alpine:3.14
