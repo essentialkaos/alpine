@@ -42,6 +42,7 @@ jobs:
 
       - name: Check for rebuild
         id: update_check
+        continue-on-error: true
         run : |
           # [update-check]
 
