@@ -23,7 +23,7 @@ docker pull essentialkaos/alpine:3.15
 docker pull essentialkaos/alpine:3.16
 ```
 
-Using GitHub Container Registry
+Using GitHub Container Registry:
 
 ```bash
 docker pull ghcr.io/essentialkaos/alpine:3.12

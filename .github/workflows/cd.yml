@@ -53,13 +53,13 @@ jobs:
             echo "::set-output name=build::true"
             exit 0
           else
-            if ! docker pull essentialkaos/alpine:${{matrix.version}} ; then
+            if ! docker pull ${{github.repository}}:${{matrix.version}} ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: new image)"
               echo "::set-output name=build::true"
               exit 0
             fi
 
-            if ! docker run --rm essentialkaos/alpine:${{matrix.version}} checkupdate ; then
+            if ! docker run --rm ${{github.repository}}:${{matrix.version}} checkupdate ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
               echo "::set-output name=build::true"
               exit 0
@@ -73,7 +73,7 @@ jobs:
           docker pull alpine:${{matrix.version}}
 
           orig_dig=$(docker inspect "alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
-          our_dig=$(docker inspect "essentialkaos/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          our_dig=$(docker inspect "${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
 
           echo ""
           echo "Original: ${orig_dig}"
@@ -112,4 +112,4 @@ jobs:
       - name: Show info about images
         uses: essentialkaos/docker-info-action@v1
         with:
-          image: essentialkaos/alpine:${{matrix.version}}
+          image: ${{github.repository}}:${{matrix.version}}
