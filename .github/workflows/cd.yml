@@ -13,6 +13,10 @@ on:
         type: choice
         options: [yes, no]
 
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   Alpine:
     name: Alpine
