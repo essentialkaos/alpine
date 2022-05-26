@@ -86,7 +86,8 @@ jobs:
         if: ${{ steps.update_check.outcome == 'failure' }}
         uses: docker/build-push-action@v3
         with:
-          context: ${{ steps.build_context.outputs.dockerfile }}
+          context: .
+          file: ${{ steps.build_context.outputs.dockerfile }}
           push: true
           tags: |
             ghcr.io/${{github.repository}}:${{matrix.version}}
