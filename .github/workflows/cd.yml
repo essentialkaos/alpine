@@ -42,7 +42,6 @@ jobs:
 
       - name: Check for rebuild
         id: update_check
-        continue-on-error: true
         run : |
           # [update-check]
 
@@ -50,13 +49,15 @@ jobs:
 
           if [[ "${{ github.event.inputs.force_rebuild }}" == "true" ]] ; then
             echo "::warning::Rebuild ${{matrix.version}} (reason: forced rebuild)"
-            exit 1
+            echo "::set-output name=build::true"
+            exit 0
           else
             docker run --rm essentialkaos/alpine:${{matrix.version}} checkupdate
 
             if [[ $? -ne 0 ]] ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
-              exit 1
+              echo "::set-output name=build::true"
+              exit 0
             fi
           fi
 
@@ -75,24 +76,25 @@ jobs:
 
           if [[ "$orig_dig" != "$our_dig" ]] ; then
             echo "::warning::Rebuild ${{matrix.version}} (reason: rebuilt base image)"
-            exit 1
+            echo "::set-output name=build::true"
+            exit 0
           fi
 
           echo "::endgroup::"
 
       - name: Checkout
-        if: ${{ steps.update_check.outcome == 'failure' }}
+        if: ${{ steps.update_check.outputs.build == 'true' }}
         uses: actions/checkout@v3
 
       - name: Set build context
-        if: ${{ steps.update_check.outcome == 'failure' }}
+        if: ${{ steps.update_check.outputs.build == 'true' }}
         id: build_context
         run: |
           dockerfile=$(echo "${{matrix.version}}" | tr -d ".")
           echo "::set-output name=dockerfile::$dockerfile.docker"
 
       - name: Rebuild and push image
-        if: ${{ steps.update_check.outcome == 'failure' }}
+        if: ${{ steps.update_check.outputs.build == 'true' }}
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -105,4 +107,4 @@ jobs:
       - name: Show info about images
         uses: essentialkaos/docker-info-action@v1
         with:
-          image: alpine:${{matrix.version}} essentialkaos/alpine:${{matrix.version}}
+          image: essentialkaos/alpine:${{matrix.version}}
