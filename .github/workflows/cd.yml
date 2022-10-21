@@ -24,11 +24,11 @@ jobs:
 
     strategy:
       matrix:
-        version: [ '3.12', '3.13', '3.14', '3.15', '3.16' ]
+        version: [ '3.14', '3.15', '3.16' ]
 
     steps:
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -50,18 +50,18 @@ jobs:
 
           if [[ "${{ github.event.inputs.force_rebuild }}" == "true" ]] ; then
             echo "::warning::Rebuild ${{matrix.version}} (reason: forced rebuild)"
-            echo "::set-output name=build::true"
+            echo "build=true" >> $GITHUB_OUTPUT
             exit 0
           else
             if ! docker pull ${{github.repository}}:${{matrix.version}} ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: new image)"
-              echo "::set-output name=build::true"
+              echo "build=true" >> $GITHUB_OUTPUT
               exit 0
             fi
 
             if ! docker run --rm ${{github.repository}}:${{matrix.version}} checkupdate ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
-              echo "::set-output name=build::true"
+              echo "build=true" >> $GITHUB_OUTPUT
               exit 0
             fi
           fi
@@ -81,7 +81,7 @@ jobs:
 
           if [[ "$orig_dig" != "$our_dig" ]] ; then
             echo "::warning::Rebuild ${{matrix.version}} (reason: rebuilt base image)"
-            echo "::set-output name=build::true"
+            echo "build=true" >> $GITHUB_OUTPUT
             exit 0
           fi
 
@@ -96,7 +96,7 @@ jobs:
         id: build_context
         run: |
           dockerfile=$(echo "${{matrix.version}}" | tr -d ".")
-          echo "::set-output name=dockerfile::$dockerfile.docker"
+          echo "dockerfile=$dockerfile.docker" >> $GITHUB_OUTPUT
 
       - name: Rebuild and push image
         if: ${{ steps.update_check.outputs.build == 'true' }}
