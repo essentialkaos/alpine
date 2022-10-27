@@ -21,6 +21,7 @@ jobs:
   Alpine:
     name: Alpine
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       matrix:
