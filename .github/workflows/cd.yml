@@ -122,3 +122,4 @@ jobs:
           format: 'table'
           ignore-unfixed: true
           severity: 'LOW,MEDIUM,HIGH,CRITICAL'
+          scanners: 'vuln'
