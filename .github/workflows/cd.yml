@@ -120,7 +120,5 @@ jobs:
         with:
           image-ref: 'ghcr.io/${{github.repository}}:${{matrix.version}}'
           format: 'table'
-          exit-code: '0'
           ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: 'LOW,MEDIUM,HIGH,CRITICAL'
