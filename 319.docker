@@ -1,0 +1,17 @@
+################################################################################
+
+FROM alpine:3.19
+
+LABEL name="EK Image with Alpine 3.19" \
+      vendor="ESSENTIAL KAOS" \
+      maintainer="Anton Novojilov" \
+      license="Apache-2.0" \
+      version="2024.02.13"
+
+COPY checkupdate /sbin/
+
+RUN apk -U upgrade && \
+    rm -f /var/cache/apk/* && \
+    rm -f /lib/apk/db/scripts.tar
+
+################################################################################
