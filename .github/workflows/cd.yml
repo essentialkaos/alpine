@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       force_rebuild:
-        description: 'Force container rebuild'
+        description: 'Force image rebuild'
         required: true
         type: choice
         options: [yes, no]
@@ -42,10 +42,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for rebuild
-        id: update_check
+        id: rebuild_check
         continue-on-error: true
         run : |
-          # [update-check]
+          # [rebuild-check]
 
           echo -e "::group::\033[34mChecking for packages updates…\033[0m"
 
@@ -54,13 +54,13 @@ jobs:
             echo "build=true" >> $GITHUB_OUTPUT
             exit 0
           else
-            if ! docker pull ${{github.repository}}:${{matrix.version}} ; then
+            if ! docker pull ghcr.io/${{github.repository}}:${{matrix.version}} ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: new image)"
               echo "build=true" >> $GITHUB_OUTPUT
               exit 0
             fi
 
-            if ! docker run --rm ${{github.repository}}:${{matrix.version}} checkupdate ; then
+            if ! docker run --rm ghcr.io/${{github.repository}}:${{matrix.version}} checkupdate ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
               echo "build=true" >> $GITHUB_OUTPUT
               exit 0
@@ -73,8 +73,8 @@ jobs:
 
           docker pull alpine:${{matrix.version}}
 
-          orig_dig=$(docker inspect "alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
-          our_dig=$(docker inspect "${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          orig_dig=$(docker inspect "ghcr.io/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          our_dig=$(docker inspect "ghcr.io/${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
 
           echo ""
           echo "Original: ${orig_dig}"
@@ -89,18 +89,18 @@ jobs:
           echo "::endgroup::"
 
       - name: Checkout
-        if: ${{ steps.update_check.outputs.build == 'true' }}
+        if: ${{ steps.rebuild_check.outputs.build == 'true' }}
         uses: actions/checkout@v4
 
       - name: Set build context
-        if: ${{ steps.update_check.outputs.build == 'true' }}
+        if: ${{ steps.rebuild_check.outputs.build == 'true' }}
         id: build_context
         run: |
           dockerfile=$(echo "${{matrix.version}}" | tr -d ".")
           echo "dockerfile=$dockerfile.docker" >> $GITHUB_OUTPUT
 
       - name: Rebuild and push image
-        if: ${{ steps.update_check.outputs.build == 'true' }}
+        if: ${{ steps.rebuild_check.outputs.build == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -118,8 +118,8 @@ jobs:
       - name: Scan final image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'ghcr.io/${{github.repository}}:${{matrix.version}}'
-          format: 'table'
+          image-ref: "ghcr.io/${{github.repository}}:${{matrix.version}}"
+          format: "table"
           ignore-unfixed: true
-          severity: 'LOW,MEDIUM,HIGH,CRITICAL'
-          scanners: 'vuln'
+          severity: "LOW,MEDIUM,HIGH,CRITICAL"
+          scanners: "vuln"
