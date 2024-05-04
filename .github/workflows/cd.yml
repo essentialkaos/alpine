@@ -17,6 +17,9 @@ permissions:
   packages: write
   contents: read
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   Alpine:
     name: Alpine
@@ -54,13 +57,13 @@ jobs:
             echo "build=true" >> $GITHUB_OUTPUT
             exit 0
           else
-            if ! docker pull ghcr.io/${{github.repository}}:${{matrix.version}} ; then
+            if ! docker pull "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}" ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: new image)"
               echo "build=true" >> $GITHUB_OUTPUT
               exit 0
             fi
 
-            if ! docker run --rm ghcr.io/${{github.repository}}:${{matrix.version}} checkupdate ; then
+            if ! docker run --rm "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}" checkupdate ; then
               echo "::warning::Rebuild ${{matrix.version}} (reason: packages update)"
               echo "build=true" >> $GITHUB_OUTPUT
               exit 0
@@ -70,11 +73,14 @@ jobs:
           echo "::endgroup::"
 
           echo -e "::group::\033[34mChecking for rebuilt base image…\033[0m"
+          echo "Pulling ${{env.REGISTRY}}/alpine:${{matrix.version}} from registry…"
 
-          docker pull ghcr.io/alpine:${{matrix.version}}
+          if ! docker pull "${{env.REGISTRY}}/alpine:${{matrix.version}}" ; then
+            echo "::error::Can't pull image ${{env.REGISTRY}}/alpine:${{matrix.version}}"
+          fi
 
-          orig_dig=$(docker inspect "ghcr.io/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
-          our_dig=$(docker inspect "ghcr.io/${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          orig_dig=$(docker inspect "${{env.REGISTRY}}/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          our_dig=$(docker inspect "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
 
           echo ""
           echo "Original: ${orig_dig}"
