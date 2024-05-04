@@ -73,13 +73,15 @@ jobs:
           echo "::endgroup::"
 
           echo -e "::group::\033[34mChecking for rebuilt base image…\033[0m"
-          echo "Pulling ${{env.REGISTRY}}/alpine:${{matrix.version}} from registry…"
+          echo "Pulling alpine:${{matrix.version}} from registry…"
+          echo ""
 
-          if ! docker pull "${{env.REGISTRY}}/alpine:${{matrix.version}}" ; then
-            echo "::error::Can't pull image ${{env.REGISTRY}}/alpine:${{matrix.version}}"
+          if ! docker pull "alpine:${{matrix.version}}" ; then
+            echo "::error::Can't pull image alpine:${{matrix.version}}"
+            exit 1
           fi
 
-          orig_dig=$(docker inspect "${{env.REGISTRY}}/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
+          orig_dig=$(docker inspect "alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
           our_dig=$(docker inspect "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
 
           echo ""
