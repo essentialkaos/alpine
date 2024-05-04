@@ -71,7 +71,7 @@ jobs:
 
           echo -e "::group::\033[34mChecking for rebuilt base image…\033[0m"
 
-          docker pull alpine:${{matrix.version}}
+          docker pull ghcr.io/alpine:${{matrix.version}}
 
           orig_dig=$(docker inspect "ghcr.io/alpine:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
           our_dig=$(docker inspect "ghcr.io/${{github.repository}}:${{matrix.version}}" | jq -r '.[0].RootFS.Layers[0]')
