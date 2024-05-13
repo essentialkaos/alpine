@@ -127,7 +127,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}"
-          format: "table"
+          format: "github"
           ignore-unfixed: true
           severity: "LOW,MEDIUM,HIGH,CRITICAL"
           scanners: "vuln"
