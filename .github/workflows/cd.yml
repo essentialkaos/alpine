@@ -128,6 +128,7 @@ jobs:
         with:
           image-ref: "${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}"
           format: "github"
+          github-pat: ${{secrets.GITHUB_TOKEN}}
           ignore-unfixed: true
           severity: "LOW,MEDIUM,HIGH,CRITICAL"
           scanners: "vuln"
