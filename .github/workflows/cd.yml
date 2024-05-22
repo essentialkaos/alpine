@@ -118,7 +118,7 @@ jobs:
             ghcr.io/${{github.repository}}:${{matrix.version}}
             ${{github.repository}}:${{matrix.version}}
 
-      - name: Show info about images
+      - name: Show info about image
         uses: essentialkaos/docker-info-action@v1
         with:
           image: ${{env.REGISTRY}}/${{github.repository}}:${{matrix.version}}
