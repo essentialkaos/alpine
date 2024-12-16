@@ -1,22 +1,21 @@
-<p align="center"><a href="#readme"><img src="https://gh.kaos.st/alpine.svg"/></a></p>
+<p align="center"><a href="#readme"><img src=".github/images/card.svg"/></a></p>
 
 <p align="center">
   <a href="https://kaos.sh/w/alpine/cd"><img src="https://kaos.sh/w/alpine/cd.svg" alt="GitHub Actions CD Status" /></a>
-  <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
+  <a href="#license"><img src=".github/images/license.svg"/></a>
 </p>
 
 <p align="center"><a href="#usage">Usage</a> • <a href="#contributing">Contributing</a> • <a href="#license">License</a></p>
 
 <br/>
 
-This repository contains Dockerfiles for [Alpine](https://www.alpinelinux.org) 3.17 - 3.21 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
+This repository contains Dockerfiles for [Alpine](https://www.alpinelinux.org) 3.18 - 3.21 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
 
 ### Usage
 
 Using GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/essentialkaos/alpine:3.17
 docker pull ghcr.io/essentialkaos/alpine:3.18
 docker pull ghcr.io/essentialkaos/alpine:3.19
 docker pull ghcr.io/essentialkaos/alpine:3.20
@@ -26,7 +25,6 @@ docker pull ghcr.io/essentialkaos/alpine:3.21
 Using DockerHub:
 
 ```bash
-docker pull essentialkaos/alpine:3.17
 docker pull essentialkaos/alpine:3.18
 docker pull essentialkaos/alpine:3.19
 docker pull essentialkaos/alpine:3.20
