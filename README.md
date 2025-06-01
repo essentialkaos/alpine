@@ -9,26 +9,26 @@
 
 <br/>
 
-This repository contains Dockerfiles for [Alpine](https://www.alpinelinux.org) 3.18 - 3.21 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
+This repository contains Dockerfiles for [Alpine](https://www.alpinelinux.org) 3.19 - 3.22 for automatic image rebuild with the latest packages installed. The resulting images are usually bigger than base images but more secure.
 
 ### Usage
 
 Using GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/essentialkaos/alpine:3.18
 docker pull ghcr.io/essentialkaos/alpine:3.19
 docker pull ghcr.io/essentialkaos/alpine:3.20
 docker pull ghcr.io/essentialkaos/alpine:3.21
+docker pull ghcr.io/essentialkaos/alpine:3.22
 ```
 
 Using DockerHub:
 
 ```bash
-docker pull essentialkaos/alpine:3.18
 docker pull essentialkaos/alpine:3.19
 docker pull essentialkaos/alpine:3.20
 docker pull essentialkaos/alpine:3.21
+docker pull essentialkaos/alpine:3.22
 ```
 
 ### Contributing

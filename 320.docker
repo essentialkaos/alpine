@@ -5,8 +5,7 @@ FROM alpine:3.20
 LABEL name="EK Image with Alpine 3.20" \
       vendor="ESSENTIAL KAOS" \
       maintainer="Anton Novojilov" \
-      license="Apache-2.0" \
-      version="2024.05.23"
+      license="Apache-2.0"
 
 COPY checkupdate /sbin/
 

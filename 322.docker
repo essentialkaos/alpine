@@ -1,12 +1,11 @@
 ################################################################################
 
-FROM alpine:3.18
+FROM alpine:3.22
 
-LABEL name="EK Image with Alpine 3.18" \
+LABEL name="EK Image with Alpine 3.22" \
       vendor="ESSENTIAL KAOS" \
       maintainer="Anton Novojilov" \
-      license="Apache-2.0" \
-      version="2023.07.27"
+      license="Apache-2.0"
 
 COPY checkupdate /sbin/
 

@@ -28,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [ '3.18', '3.19', '3.20', '3.21' ]
+        version: [ '3.19', '3.20', '3.21', '3.22' ]
 
     steps:
       - name: Login to DockerHub
