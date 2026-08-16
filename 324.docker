@@ -1,8 +1,8 @@
 ################################################################################
 
-FROM alpine:3.19
+FROM alpine:3.24
 
-LABEL name="EK Image with Alpine 3.19" \
+LABEL name="EK Image with Alpine 3.24" \
       vendor="ESSENTIAL KAOS" \
       maintainer="Anton Novojilov" \
       license="Apache-2.0"
